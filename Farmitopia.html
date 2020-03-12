@@ -1,0 +1,79 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Farmitopia Test</title>
+        <!-- Bootstrap core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/jquery.dataTables.min.css" rel="stylesheet">
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery-3.4.1.min.js"></script>
+        <script src="js/jquery.dataTables.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="card-body">
+                <div class="row row-sm">
+                    <div class="col col-sm-4">
+                        <label for="idTxtParagraph">Enter text here</label>
+                        <textarea class="form-control" id="idTxtParagraph" name="nameTxtParagraph"></textarea>
+                    </div>
+                    <div class="col col-sm-2 mt-5">
+                        <button class="btn-block" type="button" id="btnGetCount">Get Count</button>
+                    </div>
+                </div>
+
+                <div class="row row-sm mt-4">
+                    <div class="col col-sm-4">
+                        <table id="tblWordCount">
+                            <thead>
+                                <tr role="row">
+                                    <th>Word</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(function(){
+        var table = $('#tblWordCount').DataTable({
+            "oLanguage": {
+                "sEmptyTable": "No records found"
+            },
+            "order": [[1, "desc"]],
+            "dom": '<"top">rt<"bottom"><"clear">',
+        });
+    });
+
+    $("#btnGetCount").on("click", function(){
+        $("#tblWordCount tbody").empty();
+        var txtParagraph = $("#idTxtParagraph").val();
+        var jsonObj = {};
+        txtParagraph.split(" ").forEach(function(element) {
+            var count = 1;
+            if(jsonObj.hasOwnProperty(element.toLowerCase())){
+                count = jsonObj [element] + 1;
+            }
+            jsonObj [element.toLowerCase()] = count;
+        });
+        var item = $("#tblWordCount").find('td').text();
+        if(item.indexOf("No records found") != -1){
+            $("#tblWordCount td").remove();
+        }
+        $.each(jsonObj, function(word, count) {
+            var newRow = '<tr><td>'+word+'</td><td>'+count+'</td></tr>'
+            $('#tblWordCount').append(newRow);
+        });
+    });
+		
+</script>
+
